@@ -1,0 +1,57 @@
+#lab7_1
+#second smallest num
+.section .data
+    array:
+        .int 2, 3, 5, 1, 6, 7, 8, 9, 4, 10
+    
+    smallest:
+        .int 0x7fffffff
+    
+    second_smallest:
+        .int 0x7fffffff
+
+    index:
+        .int 0
+
+.section .text
+.global _start
+_start:
+    jmp L2
+
+L5:
+    movl index, %eax
+    movl array(, %eax, 4), %edx
+    movl smallest, %eax
+    cmpl %edx, %eax
+    jle L3
+    movl smallest, %eax
+    movl %eax, second_smallest
+    movl index, %eax
+    movl array(, %eax, 4), %eax
+    movl %eax, smallest
+    jmp L4
+
+L3:
+    movl index, %eax
+    movl array(, %eax, 4), %edx
+    movl second_smallest, %eax
+    cmpl %edx, %eax
+    jle L4
+    movl index, %eax
+    movl array(, %eax, 4), %eax
+    movl %eax, second_smallest
+
+L4:
+    addl $1, index
+
+L2:
+    movl index, %eax
+    cmpl $9, index
+    jle L5
+
+exit:
+    movl $1, %eax
+    movl $0, %ebx
+    int $0x80
+
+# p (int) second_smallest

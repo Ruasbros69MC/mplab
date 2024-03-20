@@ -1,0 +1,38 @@
+#lab4_4
+#given array Input: 2, 3, 7, 8, 6
+#Output: 2, 8, 6
+
+.section .data
+	input:
+		.int 5,10,15,25,30,35
+.section .bss
+	.Lcomm output, 24
+ 
+.section .text
+.globl _start
+_start:
+	movl $0,%ecx	
+	movl $0,%edx
+
+loop:
+	movl input(,%ecx, 4),%eax
+	movl $2,%ebx
+	movl $0,%edx
+	divl %ebx
+	cmpl $0,%edx
+	je update
+	addl $1,%ecx
+	cmpl $6,%ecx
+	jne loop
+	
+update:
+	movl input(,%ecx, 4),%eax
+	movl %eax,output(,%esi, 4)
+	addl $1,%esi
+	addl $1,%ecx
+	cmpl $0,%ecx
+	jne loop
+	movl $1,%eax
+	movl $0,%ebx 
+	int $0x80
+

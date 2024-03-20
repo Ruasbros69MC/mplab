@@ -1,0 +1,58 @@
+#lab6_2
+#search special char
+.section.data
+    	input:
+        	.ascii"21ETMC412025@msruas.ac.in" #length 25
+
+.section .bss
+    	.lcomm output 25
+
+.section.text
+.global _start
+_start:
+    	movl $0, %ecx
+    	movl $0, %ebx
+
+loop:
+    	movbinput(, %ecx, 1), %al
+    	jmp L1
+continue_loop:
+    	addl $1, %ecx
+    	cmpl $25, %ecx
+    	jneloop
+    	jmp print
+
+L1:
+    	cmpb $96, %al
+    	jle L2
+    	cmpb $122, %al
+    	jle continue_loop
+L2:
+    	cmpb $64, %al
+    	jle L4
+    	cmpb $90, %al
+    	jle continue_loop
+L4:
+    	cmpb $47, %al
+    	jle L5
+    	cmpb $57, %al
+    	jle continue_loop
+L5:
+    	movb input(, %ecx, 1), %al
+    	movb %al, output(, %ebx, 1)
+    	addl $1, %ebx
+    	jmp continue_loop
+
+print:
+   	movl $4, %eax
+    	movl $1, %ebx
+    	leal (output), %ecx
+    	movl $25, %edx
+    	int $0x80
+
+exit:
+    	movl $1, %eax
+    	movl $0, %ebx
+    	int $0x80
+
+# p (char[25]) input , p (char[25]) output

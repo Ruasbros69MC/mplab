@@ -1,0 +1,52 @@
+#lab6_4
+#search vowels and consonants both
+.section .data
+    string:
+        .ascii"vipulcariappa"# length 13; v = 6; c = 7
+    vowels:
+        .int0
+    consonants:
+        .int0
+
+.section .text
+.global _start
+_start:
+    movl $0, %ecx
+
+loop:
+    movbstring(, %ecx, 1), %al
+    jmp check
+
+continue_loop:
+    addl $1, %ecx
+    cmpl $13, %ecx
+    jneloop
+    jmp exit
+
+check:
+    cmpb $97, %al
+    je L2
+    
+    cmpb $101, %al
+    je L2
+    
+    cmpb $105, %al
+    je L2
+    
+    cmpb $111, %al
+    je L2
+    
+    cmpb $117, %al
+    jne L3
+
+L2:
+    addl $1, vowels
+    jmp continue_loop
+L3:
+    addl $1, consonants
+    jmp continue_loop
+
+exit:
+    movl $1, %eax
+    movl $0, %ebx
+    int $0x80

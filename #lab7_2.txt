@@ -1,0 +1,53 @@
+#lab7_2
+#sort in ascending
+.section .data
+    array:
+        .int 2, 3, 5, 1, 6, 7, 8, 9, 4, 10  # length 10
+    
+    i:
+        .int 0
+    
+    j:
+        .int 0
+
+.section .text
+.global _start
+_start:
+    jmp L2
+
+L6:
+    movl $0, j
+    jmp L3
+L5:
+    movl j, %eax 
+    movl array(, %eax, 4), %edx
+    addl $1, %eax
+    movl array(, %eax, 4), %ecx
+    cmpl %edx, %ecx
+    jge L4
+
+    # swap
+    movl %edx, array(,%eax, 4)
+    subl $1, %eax
+    movl %ecx, array(,%eax, 4)
+
+L4:
+    addl $1, j
+
+L3:
+    movl j, %eax
+    cmpl $8, %eax
+    jle L5
+    addl $1, i
+
+L2:
+    movl i, %eax
+    cmpl $9, %eax
+    jle L6
+
+exit:
+    movl $1, %eax
+    movl $0, %ebx
+    int $0x80
+
+# p (int[10]) array

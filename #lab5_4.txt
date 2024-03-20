@@ -1,0 +1,55 @@
+#lab5_4
+#compare string equal/notequal
+.section .data                      
+	compare_str1:
+        	.ascii "Python" # length 6
+    
+    	compare_str2:
+        	.ascii "Assembly" # length 7
+
+    	msg_eq:
+        	.ascii "The two strings are equal\n" # length 25
+    
+    	msg_not_eq:
+        	.ascii "The two strings are not equal\n" # length 29
+
+.section .bss
+    .lcomm msg2 36
+
+.section .text
+.global _start
+
+_start:
+	    # compare 2 strings
+	movl $0, %ecx
+
+compare_loop:
+	movb compare_str1(, %ecx, 1), %al
+	movb compare_str2(, %ecx, 1), %bl
+	cmpb %al, %bl
+	jne print_not_equal
+	addl $1, %ecx
+	cmpl $6, %ecx
+	jne compare_loop
+
+	# printing equal
+	movl $4, %eax
+	movl $1, %ebx
+	leal (msg_eq), %ecx
+	movl $26, %edx
+	int $0x80
+	jmp exit
+
+print_not_equal:
+	# printing not equal
+	movl $4, %eax
+	movl $1, %ebx
+	leal (msg_not_eq), %ecx
+	movl $30, %edx
+	int $0x80
+
+exit:
+	movl $1, %eax
+	movl $0, %ebx
+	int $0x80
+

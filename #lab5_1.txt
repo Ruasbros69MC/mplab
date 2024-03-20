@@ -1,0 +1,31 @@
+#lab5_1
+# copy msg1 to msg2
+.section .data
+    msg1:
+        .ascii "I am Pv" # length 21
+    
+    msg3:
+        .ascii "I study in blaRUAS" # length 15
+       
+.section .bss
+    .lcomm msg2 36
+
+.section .text
+.global _start
+
+_start:
+    # copying msg1 to msg2
+	movl $0, %ecx       # index
+copy_msg1_to_msg2_loop:
+	movb msg1(, %ecx, 1), %al
+	movb %al, msg2(, %ecx, 1)
+	addl $1, %ecx
+	cmpl $36 , %ecx
+    	jne copy_msg1_to_msg2_loop
+    	
+    	movl $1, %eax
+    	movl $0, %ebx
+    	int $0x80
+
+#use p (char[7]) msg1 /and last break exit/ p (char[7]) msg2
+	

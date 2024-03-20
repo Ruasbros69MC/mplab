@@ -1,0 +1,39 @@
+#lab6_1
+# searching an element in an array of ‘n’ numbers
+.section.data
+	array:
+        	.int5, 6, 7, 8, 0, 1, 2, 3, 4, 9  # length 10
+    
+	search_element:
+        	.int4
+    
+	found_at_index:
+        	.int -1
+
+
+.section.text
+.global _start
+_start:
+	movl $0, %ecx       # index
+
+search_loop:
+	movlarray(, %ecx, 4), %eax
+	addl $1, %ecx   # index++
+    
+	cmpl search_element, %eax #if array[index] == search_element
+    	je update_found_index
+
+    	cmpl $10, %ecx      # exit if index > size
+    	jne search_loop
+    	jmp exit
+
+update_found_index:
+    	subl $1, %ecx
+    	movl%ecx, found_at_index
+
+exit:
+    	movl $1, %eax
+    	movl $0, %ebx
+    	int $0x80
+
+# p (int[10]) array , p(int) search_element , p (int) found_at_index

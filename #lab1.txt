@@ -1,0 +1,40 @@
+#lab1
+.section .data
+    int32:
+        .int 0
+    int16:
+        .octa 0
+    int8:
+        .quad 0
+
+.section .text
+.globl _start
+
+_start:
+    # moving 32 bit integers
+    movl $128, %eax     # constant to register
+    movl $125, int32    # constant to memory
+    movl %eax, %ebx     # register to register
+    movl %eax, int32    # register to memory
+    movl int32, %ecx    # memory to register
+    
+    # moving 16 bit integers
+    movw $128, %ax      # constant to register
+    movw $125, int16    # constant to memory
+    movw %ax, %bx       # register to register
+    movw %ax, int16     # register to memory
+    movw int16, %cx     # memory to register
+    
+    # moving 8 bit integers
+    movb $48, %al      # constant to register
+    movb $45, int8    # constant to memory
+    movb %al, %bl       # register to register
+    movb %al, int16     # register to memory
+    movb int16, %cl     # memory to register
+
+    # exit
+    movl $1, %eax
+    movl $0, %ebx
+    int $0x80
+    
+    

@@ -1,0 +1,77 @@
+#lab2
+.Section .data
+	c:
+		.int 2
+	d:
+		.int 5
+	a:
+		.int 2
+	e:
+		.int 0
+.Section .text
+.globl _start
+_start:
+	/* a=(b+c)/d */
+	/* a=2 b=8 c=2 d=5 */ 
+	Movl $8,%ebx
+	Movl $2,%eax 
+	Addl %ebx,%eax 
+	Movl $5,%ecx 
+	divl %ecx 
+	movl %eax,a
+	
+	/* e=(bxc)-d */ 
+	movl $8,%esi 
+	movl $2,%eax 
+	mull %esi 
+	movl $5,%ecx 
+	Subl %eax,%ecx
+	movl %ecx,e
+	
+	/* e=(((axb)/c)xd) */ 
+	movl $2,%eax
+	movl $8,%edx
+	mull %edx
+	movl $2,%ecx
+	divl %ecx
+	movl $5,%ecx
+	mull %ecx
+	movl %eax,e
+	
+	
+	/* a= (b AND c) XOR d */
+	/* b=10 c=20 d=30*/ 
+	movl $10,%eax
+	movl $20,%ebx
+	movl $30,%ecx
+	movl %eax,%ecx
+	movl %ecx,a
+
+	/* a=(b XOR c) OR d */
+	/* b=10 c=20 d =30 */ 
+	movl $10,%eax
+	movl $20,%ebx
+	movl $30,%ecx
+	XOrl %eax,%ebx 
+	Orl %ebx,%ecx
+	movl %ecx,a
+	
+	/*b,c are in register a,b are in memory (a=2 d=s b=40 c=55)*/
+	movl $40,%edx
+	movl $55,%ebx
+	andl %edx,%ebx
+	movl d,%eax
+	XOrl %ebx,%eax
+	movl %eax,a
+	
+	/*b,c are in register a,b are in memory (a=2,d=s)*/ 
+	movl $4,%eax
+	movl $4,%ebx
+	XOrl %eax,%ebx
+	movl d,%edi
+	Orl %ebx,%edi
+	movl %edi,a
+	
+	movl $1,%eax
+	movl $0,%ebx
+	int $0x80

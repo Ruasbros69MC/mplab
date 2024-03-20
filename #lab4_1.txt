@@ -1,0 +1,25 @@
+#lab4_1
+#1Create an uninitialized array and Print ‘n’ natural numbers in the created array.
+
+.section .data
+		a:
+			.int 10
+.section .bss
+	.lcomm buffer,1000
+
+.section .text
+.globl _start
+_start:
+	movl $0, %ecx  # Initialize loop counter
+	movl $1, %eax    
+
+	Loop:
+		    movl %eax,buffer( ,%ecx,4)  	
+		    addl $1, %ecx
+		    addl $1, %eax  		    
+		    cmpl $100, %ecx  		     # Check if loop counter reached 10
+		    jne Loop                         # If not, repeat the loop
+
+		    movl $1, %eax
+		    movl $0,%ebx  
+		    int $0x10

@@ -1,0 +1,107 @@
+#lab3
+.section .data
+    Value:
+        .int 2
+
+    A:
+        .int 12,24,36,48,60,75,82,90,95,100
+
+    Side1:
+        .int 32
+
+    Side2:
+        .int 40
+
+    Side3:
+        .int 62
+
+.section .text
+.globl _start
+
+_start:
+    # Task 1: Assign array[5]=0 and array[8]=0
+    movl $0, %eax
+    movl $5, %ecx
+    movl $0, A(,%eax,4)  # Array[5] = 0
+    movl $8, %edx
+    movl $0, A(,%edx,4)  # Array[8] = 0
+
+    # Task 2: Perform computation: Value = array[3] + array[6], array[7] = Value + array[7]
+    movl A(,%ecx,4), %eax  # Load array[3] into %eax
+    addl A(,%edx,4), %eax  # Add array[6] to %eax
+    movl %eax, Value       # Store result in Value
+    addl A(,%ecx,4), %eax  # Add Value to array[7]
+    movl %eax, A(,%edi,4)  # Store result in array[7]
+
+    # Task 3: Compare array[5] with array[8]
+    movl A(,%eax,4), %ecx  # Load array[5] into %ecx
+    movl A(,%ebx,4), %edx  # Load array[8] into %edx
+    cmp %ecx, %edx         # Compare the values loaded from memory
+    jz they_are_equal
+    jmp they_are_not_equal
+
+they_are_equal:
+    # Code if array[5] and array[8] are equal
+    movl $1, %eax  # Set return value to 1
+    jmp exit       # Exit program
+
+they_are_not_equal:
+    # Code if array[5] and array[8] are not equal
+    movl $2, %eax  # Set return value to 2
+    jmp exit       # Exit program
+
+    # Task 4: Read the 7th element of the array and check whether it's odd or even number
+    movl $6, %ecx          # Set index to 6 (7th element)
+    movl A(,%ecx,4), %eax  # Load array[6] into %eax
+    movl $2, %edx
+    movl $0, %ebx
+    divl %edx              # Divide by 2
+    testl $1, %edx         # Check remainder
+    jnz odd_number         # Jump if odd
+    jmp even_number        # Jump if even
+
+even_number:
+    # Code if the number is even
+    movl $4, %eax          # Set return value to 4
+    jmp exit               # Exit program
+
+odd_number:
+    # Code if the number is odd
+    movl $5, %eax          # Set return value to 5
+    jmp exit               # Exit program
+
+    # Task 5: Determine the type of triangle
+    movl Side1, %eax       # Load side 1 into %eax
+    cmpl Side2, %eax       # Compare side 1 with side 2
+    jne not_equal_sides   # Jump if not equal
+    cmpl Side3, %eax       # Compare side 1 with side 3
+    je equal_sides        # Jump if equal
+    jmp scalene_triangle  # Jump to handle scalene triangle
+
+not_equal_sides:
+    # Code if sides are not equal
+    movl Side2, %eax       # Load side 2 into %eax
+    cmpl Side3, %eax       # Compare side 2 with side 3
+    je scalene_triangle   # Jump if equal
+    jmp isosceles_triangle # Jump to handle isosceles triangle
+
+equal_sides:
+    # Code if all sides are equal
+    movl $6, %eax          # Set return value to 6
+    jmp exit               # Exit program
+
+scalene_triangle:
+    # Code for scalene triangle
+    movl $7, %eax          # Set return value to 7
+    jmp exit               # Exit program
+
+isosceles_triangle:
+    # Code for isosceles triangle
+    movl $8, %eax          # Set return value to 8
+    jmp exit               # Exit program
+
+exit:
+    # Exit syscall
+    movl $1, %eax  # syscall number for exit
+    xorl %ebx, %ebx  # Exit status 0
+    int $0x80       # Call kernel

@@ -1,0 +1,46 @@
+#lab5_2
+#no. of vowels
+.section .data
+	input_string:
+		.asciz "Hi Welcome"
+	vowels:
+		.asciz "aeiou"
+.section .bss
+	.lcomm output_string, 15
+
+.section .text
+.globl _start
+_start:
+	movl $0,%ecx
+	movl $0,%edx
+	movl $0,%edi
+
+loop:
+	movb input_string(,%ecx, 1), %al
+	movb vowels(,%edx,1),%bl
+	cmpb %al,%bl
+	jne increment_vowel_loop_index
+	addl $1,%edi
+	movl $0,%edx
+	addl $1,%ecx
+	cmpl $10,%ecx
+	jne loop
+	jmp Exit
+
+increment_vowel_loop_index:
+	addl $1,%edx
+	cmpl $5,%edx
+	Jne loop
+
+increment_input_string_loop_index:
+	movl $0,%edx
+	addl $1,%ecx
+	cmpl $10,%ecx
+	jne loop
+
+Exit:
+	movl $1,%eax
+	movl $0,%ebx
+	int $0x80
+	
+#use p (int[2]) output_string

@@ -1,0 +1,35 @@
+#lab4_2
+#Input Array: 10, 20, 30, 40, 50 Element to be inserted: 60
+.section .data
+	input_array:
+		.int 10,20,30,40,50
+	output_array:
+		.int 0,0,0,0,0
+	pos:
+		.int 3
+.section .text
+.globl _start
+_start:
+	movl $0,%ecx
+	movl $0,%edx
+loop:
+	cmpl pos,%ecx
+	jne update_loop_index	
+	movl $60,output_array(,%edx,4)
+	addl $1,%edx
+	jmp update_loop_index
+
+update_loop_index:
+	movl input_array(,%ecx,4),%eax
+	movl %eax,output_array(,%edx,4)
+	addl $1,%ecx
+	addl $1,%edx
+	jmp loop_bound_checking
+
+loop_bound_checking:
+	cmpl $5,%ecx
+	Jne loop
+	movl $0,%eax
+	movl $1,%ebx
+	int $0x80
+#use p (int[6])output_array

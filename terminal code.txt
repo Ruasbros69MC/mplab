@@ -1,0 +1,16 @@
+mkdir filename
+cd filename
+gedit filename.s
+
+
+after writing code close the file and come back to terminal
+
+
+as -gstabs filename.s -o filename.o
+ld filename.o -o filename
+gdb filename
+run
+break 5(any line number)
+info registers
+q (exit)
+
